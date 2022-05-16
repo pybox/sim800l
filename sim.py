@@ -1,22 +1,17 @@
-import serial
 
 class sim(object):
-    def __init__(self, port, baudrate=9600, timeout=2):
-        self.port = port
-        self.baudrate = baudrate
-        self.timeout = timeout
-        self.sim_serial = serial.Serial(port, baudrate=self.baudrate, timeout=self.timeout)
-
+    def __init__(self, serialport):
+        self.sim_serial = serialport
         self.at = b'AT\n'
     def response_handler(self):
         try :
             r = ''
-            i = 0
-            while(i < 2):
+            line = 0
+            while(line < 2):
                 r1 = self.sim_serial.read().decode()
                 if r1 == '\n' :
-                    i+=1
-                if i :
+                    line+=1
+                if line :
                     r+=r1
             return r[:-1]
         except Exception as e :
