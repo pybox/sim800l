@@ -4,6 +4,11 @@ class sim(object):
     def __init__(self, serialport):
         self.sim_serial = serialport
         self.at = b'AT\n'
+    def initial(self):
+        r = self.command("AT+CMGF=1\n")
+        r = self.command("AT+CSCS=\"HEX\"\n")
+        r = self.command("AT+CSMP=49,167,0,8\n")
+
     def response_handler(self):
         try :
             r = ''
