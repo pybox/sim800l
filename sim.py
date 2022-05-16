@@ -17,6 +17,15 @@ class sim(object):
         except Exception as e :
             print(e)
             return False
+    def command(self,cmd):
+        self.sim_serial.write(cmd)
+        r = self.response_handler()
+        if r == "OK":
+            return {'data' : "" , 'status' : r}
+        else:
+            r2 = self.response_handler()
+            return {'data' : r , 'status' : r2}
+
     def isOpen(self):
         self.sim_serial.write(self.at)
         if self.response_handler() == "OK" :
