@@ -31,8 +31,8 @@ class sim(object):
             str_hex = ((4 - len(str_hex) ) * '0' ) + str_hex # 020 to 0020
             h+=str_hex
         return h
-    def hex_tpo_persian(self, h):
-        j = 1
+    def hex_to_persian(self, h):
+        j = 0
         text = ''
         for i in range(0, len(h)-4, 4):
             text += chr(int(h[j:j+4], 16))
