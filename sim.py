@@ -27,8 +27,8 @@ class sim(object):
             return {'data' : r , 'status' : r2}
 
     def isOpen(self):
-        self.sim_serial.write(self.at)
-        if self.response_handler() == "OK" :
+        response = self.command(self.at)
+        if response['status'] == 'OK' :
             return True
         else :
             return False
