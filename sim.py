@@ -19,9 +19,9 @@ class sim(object):
             print(e)
             return False
     def sendSMS(self, number, text):
-        self.sim_serial.write('AT+CMGS=\"'+number+'\"\r')
+        self.sim_serial.write(('AT+CMGS=\"'+number+'\"\r').encode('ascii'))
         time.sleep(0.5)
-        self.sim_serial.write(text)
+        self.sim_serial.write(text.encode('ascii'))
         self.sim_serial.flushInput()
         #end of command:
         response = self.command(b'\x1a')
