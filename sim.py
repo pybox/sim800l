@@ -31,6 +31,13 @@ class sim(object):
             str_hex = ((4 - len(str_hex) ) * '0' ) + str_hex # 020 to 0020
             h+=str_hex
         return h
+    def hex_tpo_persian(self, h):
+        j = 1
+        text = ''
+        for i in range(len(h)-4, step=4):
+            text += chr(int(h[j:j+4], 16))
+            j+=4
+        return text
 
     def sendSMS(self, number, text):
         self.sim_serial.write(('AT+CMGS=\"'+number+'\"\r').encode('ascii'))
