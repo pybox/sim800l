@@ -1,3 +1,4 @@
+import time
 
 class sim(object):
     def __init__(self, serialport):
@@ -17,6 +18,18 @@ class sim(object):
         except Exception as e :
             print(e)
             return False
+    def sendSMS(self, number, text):
+        self.sim_serial.write('AT+CMGS=\"'+number+'\"\r')
+        time.sleep(0.5)
+        self.sim_serial.write(text)
+        self.sim_serial.flushInput()
+        #end of command:
+        response = self.command(b'\x1a')
+        if response:
+            return response
+        else:
+            return False
+
     def command(self,cmd):
         self.sim_serial.write(cmd)
         r = self.response_handler()
