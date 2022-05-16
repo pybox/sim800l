@@ -28,6 +28,7 @@ class sim(object):
         for i in text:
             str_hex = hex(ord(i))
             str_hex = str_hex.replace('x' , '') # 0xNNNN to 0NNNN
+            str_hex = ((4 - len(str_hex) ) * '0' ) + str_hex # 020 to 0020
             h+=str_hex
         return h
 
