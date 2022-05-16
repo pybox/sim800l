@@ -22,7 +22,7 @@ class sim(object):
         h = ''
         for i in text:
             str_hex = hex(ord(i))
-            str_hex.replace('x' , '') # 0xNNNN to 0NNNN
+            str_hex = str_hex.replace('x' , '') # 0xNNNN to 0NNNN
             h+=str_hex
         return h
 
