@@ -9,10 +9,10 @@ class sim(object):
             line = 0
             while(line < 2):
                 r1 = self.sim_serial.read().decode()
-                if r1 == '\n' :
-                    line+=1
-                if line :
+                if line and r1 != '\r':
                     r+=r1
+                if r1 == '\n':
+                    line+=1
             return r[:-1]
         except Exception as e :
             print(e)
