@@ -18,6 +18,14 @@ class sim(object):
         except Exception as e :
             print(e)
             return False
+    def persian_to_hex(self, text):
+        h = ''
+        for i in text:
+            str_hex = hex(ord(i))
+            str_hex.replace('x' , '') # 0xNNNN to 0NNNN
+            h+=str_hex
+        return h
+
     def sendSMS(self, number, text):
         self.sim_serial.write(('AT+CMGS=\"'+number+'\"\r').encode('ascii'))
         time.sleep(0.5)
