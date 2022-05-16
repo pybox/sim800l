@@ -34,7 +34,7 @@ class sim(object):
     def hex_tpo_persian(self, h):
         j = 1
         text = ''
-        for i in range(len(h)-4, step=4):
+        for i in range(0, len(h)-4, 4):
             text += chr(int(h[j:j+4], 16))
             j+=4
         return text
