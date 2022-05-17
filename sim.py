@@ -97,15 +97,7 @@ class sim(threading.Thread):
         print("text : " + message)
         if number in self.numbers:
             if message == "وضعیت":
-                text = '''
-                دما : %.2f ℃
-                رطوبت محیط : %.2f %%RH
-                رطوبت چوب : %.2f %%
-                سرعت فن : %.2f %%
-                مشعل : %s
-                فرایند در حال اجرا : %s
-                مرحله %s از %s
-                '''
+                text = "دما : %2f ℃\nرطوبت محیط : %.2f %%RH\nرطوبت چوب : %.2f %%\nسرعت فن : %.2f %%\nمشعل : %s\nفرایند در حال اجرا : %s\nمرحله %s از %s"
                 r = requests.post('http://127.0.0.1:8000/manager/process/', json={'query' : 'read'})
                 r = r.json()
                 r2 = requests.post('http://127.0.0.1:8000/sensors/', json={'q' : 'all'})
