@@ -2,6 +2,7 @@ import time
 import codecs
 import threading
 import requests
+import os
 
 class sim(threading.Thread):
     def __init__(self, serialport):
@@ -97,7 +98,7 @@ class sim(threading.Thread):
         print("text : " + message)
         if number in self.numbers:
             if message == "وضعیت":
-                text = "دما : %2f (درجه سانتی گراد)\nرطوبت محیط : %.2f %%RH\nرطوبت چوب : %.2f %%\nسرعت فن : %.2f %%\nمشعل : %s\nفرایند در حال اجرا : %s\nمرحله %s از %s"
+                text = "دما : %.2f (درجه سانتی گراد)\nرطوبت محیط : %.2f %%RH\nرطوبت چوب : %.2f %%\nسرعت فن : %.2f %%\nمشعل : %s\nفرایند در حال اجرا : %s\nمرحله %s از %s"
                 r = requests.post('http://127.0.0.1:8000/manager/process/', json={'query' : 'read'})
                 r = r.json()
                 r2 = requests.post('http://127.0.0.1:8000/sensors/', json={'q' : 'all'})
@@ -117,6 +118,9 @@ class sim(threading.Thread):
                 else:
                     text = "دستگاه درحال انجام فرایند نیست"
                 self.todo_list.append({'q' : 'sendSMS', 'number' : number, 'text' : text})
+            if message == "خاموش":
+                text = "درحال خاموش شدن"
+                self.todo_list.append({'q' : 'sendSMS', 'number' : number, 'text' : text})
 
 
 
@@ -129,6 +133,8 @@ class sim(threading.Thread):
                 del self.todo_list[0]
                 if do['q'] == 'sendSMS':
                     self.sendSMS(do['number'], do['text'])
+                    if do["text"] == "درحال خاموش شدن":
+                        os.system("/usr/sbin/poweroff")
                 elif do['q'] == 'call':
                     pass
             r = self.readSMS()
