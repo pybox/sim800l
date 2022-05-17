@@ -8,6 +8,7 @@ class sim(threading.Thread):
         self.sim_serial = serialport
         self.at = b'AT\n'
         self.todo_list = []
+        self.numbers = ['+989012941790']
     def initial(self):
         self.sim_serial.write(b"AT+CMGF=1\n")
         time.sleep(0.5)
@@ -93,6 +94,39 @@ class sim(threading.Thread):
     def message_handler(self, number, message):
         print("num : " + number)
         print("text : " + message)
+        if number in self.numbers:
+            if message == "وضعیت":
+                text = '''
+                دما : %.2f ℃
+                رطوبت محیط : %.2f %%RH
+                رطوبت چوب : %.2f %%
+                سرعت فن : %.2f %%
+                مشعل : %s
+                فرایند در حال اجرا : %s
+                مرحله %s از %s
+                '''
+                r = requests.post('http://127.0.0.1:8000/manager/process/', json={'query' : 'read'})
+                r = r.json()
+                r2 = requests.post('http://127.0.0.1:8000/sensors/', json={'q' : 'all'})
+                r2 = r2.json()
+                if r2['torch'] in [1,3]:
+                    torch = "روشن"
+                else:
+                    torch = "خاموش"
+                text = text % (r2['temp'], r2['hmofenv'], r2['mc'], r['fanspeed'], torch, r['name'], r['instep'], r['steps'])
+                self.todo_list.append({'q' : 'sendSMS', 'number' : number, 'text' : text})
+            if message == "توقف فرایند":
+                r = requests.post('http://127.0.0.1:8000/manager/process/', json={'query' : 'read'})
+                r = r.json()
+                if r['steps']:
+                    requests.post('http://127.0.0.1:8000/manager/process/', json={'query' : 'stop'})
+                    text = "فرایند متوقف شد"
+                else:
+                    text = "دستگاه درحال انجام فرایند نیست"
+                self.todo_list.append({'q' : 'sendSMS', 'number' : number, 'text' : text})
+            
+
+
 
     def run(self):
         self.initial()
@@ -107,5 +141,3 @@ class sim(threading.Thread):
             r = self.readSMS()
             if r:
                 self.message_handler(r[1], r[0])
-
-
