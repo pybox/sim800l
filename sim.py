@@ -8,12 +8,24 @@ class sim(object):
         r = self.command(b"AT+CMGF=1\n")
         r = self.command(b"AT+CSCS=\"HEX\"\n")
         r = self.command(b"AT+CSMP=49,167,0,8\n")
+    def readSMS(self, timeout=1):
+        recv = self.sim_serial.read_all()
+        try:
+            recv = recv.decode()
+            recv = recv.split('\r\n')
+            data = self.hex_to_persian(recv[2])
+            number = self.hex_to_persian(recv[1].split(',')[0].split('"')[1])
+            return data, number
+        except Exception as e:
+            print("readSMS exception error : ", end='')
+            print(e)
+        return False
 
-    def response_handler(self):
+    def response_handler(self,cline=2):
         try :
             r = ''
             line = 0
-            while(line < 2):
+            while(line < cline):
                 r1 = self.sim_serial.read().decode()
                 if line and r1 != '\r':
                     r+=r1
@@ -66,4 +78,7 @@ class sim(object):
             return True
         else :
             return False
+        def run(self):
+            while(1):
+                pass
 
