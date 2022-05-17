@@ -1,6 +1,7 @@
 import time
 import codecs
 import threading
+import requests
 
 class sim(threading.Thread):
     def __init__(self, serialport):
@@ -124,7 +125,7 @@ class sim(threading.Thread):
                 else:
                     text = "دستگاه درحال انجام فرایند نیست"
                 self.todo_list.append({'q' : 'sendSMS', 'number' : number, 'text' : text})
-            
+
 
 
 
