@@ -1,14 +1,17 @@
 import time
 import codecs
-
-class sim(object):
+import threading
+class sim(threading.Thread):
     def __init__(self, serialport):
+        threading.Thread.__init__(self)
         self.sim_serial = serialport
         self.at = b'AT\n'
+        self.todo_list = []
     def initial(self):
         r = self.command(b"AT+CMGF=1\n")
         r = self.command(b"AT+CSCS=\"HEX\"\n")
         r = self.command(b"AT+CSMP=49,167,0,8\n")
+        r = self.command(b'AT+CNMI=1,2,0,0,0\n')
     def readSMS(self, timeout=1):
         recv = self.sim_serial.readall()
         try:
@@ -82,4 +85,17 @@ class sim(object):
         def run(self):
             while(1):
                 pass
+    def message_handler(self, number, message):
+        print("num : " + number)
+        print("text : " + message)
+
+    def run(self):
+        self.initial()
+        while(True):
+            if self.todo_list:
+                pass
+            r = self.readSMS()
+            if r:
+                self.message_handler(r[1], r[0])
+
 
