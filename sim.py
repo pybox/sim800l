@@ -1,6 +1,7 @@
 import time
 import codecs
 import threading
+
 class sim(threading.Thread):
     def __init__(self, serialport):
         threading.Thread.__init__(self)
@@ -93,7 +94,12 @@ class sim(threading.Thread):
         self.initial()
         while(True):
             if self.todo_list:
-                pass
+                do = self.todo_list[0]
+                del self.todo_list[0]
+                if do['q'] == 'sendSMS':
+                    self.sendSMS(do['number'], do['text'])
+                elif do['q'] == 'call':
+                    pass
             r = self.readSMS()
             if r:
                 self.message_handler(r[1], r[0])
