@@ -57,6 +57,7 @@ class sim(threading.Thread):
         return text
 
     def sendSMS(self, number, text):
+        text = self.persian_to_hex(text)
         self.sim_serial.write(('AT+CMGS=\"'+number+'\"\r').encode('ascii'))
         time.sleep(0.5)
         self.sim_serial.write(text.encode('ascii'))
