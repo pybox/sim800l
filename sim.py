@@ -1,4 +1,5 @@
 import time
+import codecs
 
 class sim(object):
     def __init__(self, serialport):
@@ -14,8 +15,8 @@ class sim(object):
             recv = recv.decode()
             recv = recv.split('\r\n')
             data = self.hex_to_persian(recv[2])
-            number = self.hex_to_persian(recv[1].split(',')[0].split('"')[1])
-            return data, number
+            number = codecs.decode(recv[1].split(',')[0].split('"')[1], 'hex')
+            return data, number.decode()
         except Exception as e:
             print("readSMS exception error : ", end='')
             print(e)
@@ -46,7 +47,7 @@ class sim(object):
     def hex_to_persian(self, h):
         j = 0
         text = ''
-        for i in range(0, len(h)-4, 4):
+        for i in range(0, len(h)-3, 4):
             text += chr(int(h[j:j+4], 16))
             j+=4
         return text
