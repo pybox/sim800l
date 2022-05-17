@@ -9,7 +9,7 @@ class sim(object):
         r = self.command(b"AT+CSCS=\"HEX\"\n")
         r = self.command(b"AT+CSMP=49,167,0,8\n")
     def readSMS(self, timeout=1):
-        recv = self.sim_serial.read_all()
+        recv = self.sim_serial.readall()
         try:
             recv = recv.decode()
             recv = recv.split('\r\n')
