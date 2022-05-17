@@ -9,10 +9,13 @@ class sim(threading.Thread):
         self.at = b'AT\n'
         self.todo_list = []
     def initial(self):
-        r = self.command(b"AT+CMGF=1\n")
-        r = self.command(b"AT+CSCS=\"HEX\"\n")
-        r = self.command(b"AT+CSMP=49,167,0,8\n")
-        r = self.command(b'AT+CNMI=1,2,0,0,0\n')
+        self.sim_serial.write(b"AT+CMGF=1\n")
+        time.sleep(0.5)
+        self.sim_serial.write(b"AT+CSCS=\"HEX\"\n")
+        time.sleep(0.5)
+        self.sim_serial.write(b"AT+CSMP=49,167,0,8\n")
+        time.sleep(0.5)
+        self.sim_serial.write(b'AT+CNMI=1,2,0,0,0\n')
     def readSMS(self, timeout=1):
         recv = self.sim_serial.readall()
         try:
