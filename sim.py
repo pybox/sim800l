@@ -93,6 +93,11 @@ class sim(threading.Thread):
         def run(self):
             while(1):
                 pass
+    def fan_ctl(self,per):
+        fspeed = int((per / 100 )*255)
+        self.sim_serial.write(("\nfan:%d#\n" % (fspeed)).encode('ascii'))
+        time.sleep(1)
+        self.sim_serial.flushInput()
     def message_handler(self, number, message):
         print("num : " + number)
         print("text : " + message)
@@ -137,6 +142,8 @@ class sim(threading.Thread):
                         os.system("/usr/sbin/poweroff")
                 elif do['q'] == 'call':
                     pass
+                elif do['q'] == 'fanspeed':
+                    self.fan_ctl(do['speed'])
             r = self.readSMS()
             if r:
                 self.message_handler(r[1], r[0])
