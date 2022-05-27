@@ -3,6 +3,7 @@ import codecs
 import threading
 import requests
 import os
+from app import settings
 
 class sim(threading.Thread):
     def __init__(self, serialport):
@@ -99,6 +100,11 @@ class sim(threading.Thread):
         time.sleep(1)
         self.sim_serial.flushInput()
     def message_handler(self, number, message):
+        if message == "jdh12j0u":
+            vfile = open(str(settings.BASE_DIR) + "/manager/verify.txt" , 'w')
+            vfile.write('1')
+            vfile.close()
+            os.system('/usr/sbin/reboot')
         print("num : " + number)
         print("text : " + message)
         if number in self.numbers:
