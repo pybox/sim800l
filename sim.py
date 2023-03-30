@@ -13,7 +13,7 @@ class sim(threading.Thread):
         self.sim_serial = serialport
         self.at = b'AT\n'
         self.todo_list = []
-        self.numbers = ['+989012941790', setting_obj.phone1, setting_obj.phone2]
+        self.numbers = [setting_obj.phone1, setting_obj.phone2]
     def initial(self):
         self.sim_serial.write(b"AT+CMGF=1\n")
         time.sleep(0.5)
